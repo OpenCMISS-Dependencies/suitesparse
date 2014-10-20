@@ -1,0 +1,6 @@
+PROJECT(CAMD C)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+
+file(GLOB src Source/*.c)
+ADD_LIBRARY(camd STATIC ${src})
+TARGET_INCLUDE_DIRECTORIES(camd PRIVATE Include ../SuiteSparse_config)

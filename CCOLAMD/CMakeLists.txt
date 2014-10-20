@@ -1,0 +1,6 @@
+PROJECT(CCOLAMD C)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+
+file(GLOB src Source/*.c)
+ADD_LIBRARY(ccolamd STATIC ${src})
+TARGET_INCLUDE_DIRECTORIES(ccolamd PRIVATE Include ../SuiteSparse_config)
