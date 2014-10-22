@@ -1,0 +1,5 @@
+set(extra "")
+set(LIBS camdi camdl)
+CREATE_TEST(camd_demo c)
+CREATE_TEST(camd_demo2 c)
+CREATE_TEST(camd_l_demo c)

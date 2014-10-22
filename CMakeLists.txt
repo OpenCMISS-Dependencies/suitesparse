@@ -22,6 +22,23 @@ find_package(MPI REQUIRED)
 
 include(CMakePackageConfigHelpers)
 enable_testing()
+MACRO(CREATE_TEST NAME TYPE)
+    add_executable(${NAME} ${NAME}.${TYPE} ${extra})
+    target_include_directories(${NAME} PRIVATE 
+        ../Include
+    $<TARGET_PROPERTY:suitesparseconfig,INTERFACE_INCLUDE_DIRECTORIES>)
+    target_link_libraries(${NAME} PRIVATE ${LIBS} suitesparseconfig)
+    if (UNIX)
+        target_link_libraries(${NAME} PRIVATE rt m)
+    endif()
+    
+    set(TARGET ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.out)
+    add_test(NAME ${NAME}
+        COMMAND ${CMAKE_COMMAND}
+            -DCMD=$<TARGET_FILE:${NAME}>
+            -DTARGET=${TARGET}
+            -P ${SuiteSparse_SOURCE_DIR}/testhelper.cmake)
+ENDMACRO()
 
 add_subdirectory(SuiteSparse_config)
 add_subdirectory(AMD)

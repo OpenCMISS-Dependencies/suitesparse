@@ -19,9 +19,10 @@ TARGET_INCLUDE_DIRECTORIES(cholmod PUBLIC
     Include
 )
 target_link_libraries(cholmod 
-    PUBLIC amdi amdl camd colamd ccolamd 
+    PUBLIC amdl amdi camdi camdl colamdi colamdl ccolamdi ccolamdl 
     PRIVATE blas lapack metis
 )
-export(TARGETS cholmod amdl amdi camd colamd ccolamd FILE ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/cholmod-${CHOLMOD_VERSION}/cholmod-config.cmake)
+export(TARGETS cholmod amdl amdi camdi camdl colamdi colamdl ccolamdi ccolamdl
+    FILE ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/cholmod-${CHOLMOD_VERSION}/cholmod-config.cmake)
 WRITE_BASIC_PACKAGE_VERSION_FILE(${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/cholmod-${CHOLMOD_VERSION}/cholmod-config-version.cmake
     VERSION ${CHOLMOD_VERSION} COMPATIBILITY AnyNewerVersion)

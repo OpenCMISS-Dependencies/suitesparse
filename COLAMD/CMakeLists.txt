@@ -1,6 +1,9 @@
-#PROJECT(COLAMD C)
-#CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
-
 file(GLOB src Source/*.c)
-ADD_LIBRARY(colamd STATIC ${src})
-TARGET_INCLUDE_DIRECTORIES(colamd PRIVATE Include ../SuiteSparse_config)
+ADD_LIBRARY(colamdi STATIC ${src})
+target_compile_definitions(colamdi PRIVATE DINT)
+TARGET_INCLUDE_DIRECTORIES(colamdi PRIVATE Include ../SuiteSparse_config)
+ADD_LIBRARY(colamdl STATIC ${src})
+target_compile_definitions(colamdl PRIVATE DLONG)
+TARGET_INCLUDE_DIRECTORIES(colamdl PRIVATE Include ../SuiteSparse_config)
+
+add_subdirectory(Demo)
