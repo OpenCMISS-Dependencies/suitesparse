@@ -15,7 +15,7 @@ Column:  4 number of entries:  2 with row indices in AI ( 11 ...  12)
 Column:  5 number of entries:  2 with row indices in AI ( 13 ...  14)
     row indices:   2  5
 
-AMD version 2.4.1, Oct 10, 2014, results:
+amd:  approximate minimum degree ordering, results:
     status: OK
     n, dimension of A:                                  5
     nz, number of nonzeros in A:                        14

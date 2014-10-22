@@ -1,9 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
-PROJECT(CHOLMOD VERSION 3.5.0 LANGUAGES C)
-
-find_package(BLAS CONFIG REQUIRED)
-find_package(LAPACK CONFIG REQUIRED)
-#find_package(METIS CONFIG REQUIRED)
+PROJECT(CHOLMOD VERSION 3.0.1 LANGUAGES C)
 
 file(GLOB check Check/*.c)
 file(GLOB chol Cholesky/cholmod*.c)
@@ -14,6 +9,7 @@ file(GLOB mod Modify/cholmod*.c)
 file(GLOB part Partition/*.c)
 file(GLOB snod Supernodal/cholmod*.c)
 ADD_LIBRARY(cholmod STATIC ${check} ${chol} ${core} ${matops} ${mod} ${part} ${snod})
+set_target_properties(cholmod PROPERTIES OUTPUT_NAME cholmod-${CHOLMOD_VERSION})
 TARGET_INCLUDE_DIRECTORIES(cholmod PRIVATE 
     ../SuiteSparse_config
     ../AMD/Include ../COLAMD/Include ../CAMD/Include ../CCOLAMD/Include
@@ -22,5 +18,10 @@ TARGET_INCLUDE_DIRECTORIES(cholmod PRIVATE
 TARGET_INCLUDE_DIRECTORIES(cholmod PUBLIC
     Include
 )
-target_link_libraries(cholmod blas lapack metis amd camd colamd ccolamd)
-export(TARGETS cholmod metis amd camd colamd ccolamd FILE ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/cholmod-config.cmake)
+target_link_libraries(cholmod 
+    PUBLIC amdi amdl camd colamd ccolamd 
+    PRIVATE blas lapack metis
+)
+export(TARGETS cholmod amdl amdi camd colamd ccolamd FILE ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/cholmod-${CHOLMOD_VERSION}/cholmod-config.cmake)
+WRITE_BASIC_PACKAGE_VERSION_FILE(${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/cholmod-${CHOLMOD_VERSION}/cholmod-config-version.cmake
+    VERSION ${CHOLMOD_VERSION} COMPATIBILITY AnyNewerVersion)
