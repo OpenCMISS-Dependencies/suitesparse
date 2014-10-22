@@ -13,7 +13,6 @@ set_target_properties(cholmod PROPERTIES OUTPUT_NAME cholmod-${CHOLMOD_VERSION})
 TARGET_INCLUDE_DIRECTORIES(cholmod PRIVATE 
     ../SuiteSparse_config
     ../AMD/Include ../COLAMD/Include ../CAMD/Include ../CCOLAMD/Include
-    $<TARGET_PROPERTY:metis,INTERFACE_INCLUDE_DIRECTORIES>
 )
 TARGET_INCLUDE_DIRECTORIES(cholmod PUBLIC
     Include
@@ -26,3 +25,5 @@ export(TARGETS cholmod amdl amdi camdi camdl colamdi colamdl ccolamdi ccolamdl
     FILE ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/cholmod-${CHOLMOD_VERSION}/cholmod-config.cmake)
 WRITE_BASIC_PACKAGE_VERSION_FILE(${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/cholmod-${CHOLMOD_VERSION}/cholmod-config-version.cmake
     VERSION ${CHOLMOD_VERSION} COMPATIBILITY AnyNewerVersion)
+    
+add_subdirectory(Demo)
