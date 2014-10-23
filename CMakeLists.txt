@@ -24,12 +24,10 @@ include(CMakePackageConfigHelpers)
 enable_testing()
 MACRO(CREATE_TEST NAME TYPE)
     add_executable(${NAME} ${NAME}.${TYPE} ${extra})
-    target_include_directories(${NAME} PRIVATE 
-        ../Include
-    $<TARGET_PROPERTY:suitesparseconfig,INTERFACE_INCLUDE_DIRECTORIES>)
+    target_include_directories(${NAME} PRIVATE ../Include)
     target_link_libraries(${NAME} PRIVATE ${LIBS} suitesparseconfig)
     if (UNIX)
-        target_link_libraries(${NAME} PRIVATE rt m)
+        target_link_libraries(${NAME} PRIVATE m)
     endif()
     
     set(TARGET ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.out)
