@@ -6,4 +6,6 @@ ADD_LIBRARY(camdl STATIC ${src})
 target_compile_definitions(camdl PRIVATE DLONG)
 TARGET_INCLUDE_DIRECTORIES(camdl PRIVATE Include ../SuiteSparse_config)
 
-add_subdirectory(Demo)
+if (BUILD_TESTING)
+    add_subdirectory(Demo)
+endif()

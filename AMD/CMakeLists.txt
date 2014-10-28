@@ -28,4 +28,6 @@ TARGET_INCLUDE_DIRECTORIES(amdl
 #export(TARGETS amd FILE ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/amd-config.cmake)
 
 # add tests/demos
-add_subdirectory(Demo)
+if (BUILD_TESTING)
+    add_subdirectory(Demo)
+endif()

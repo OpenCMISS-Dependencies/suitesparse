@@ -6,4 +6,6 @@ ADD_LIBRARY(ccolamdl STATIC ${src})
 target_compile_definitions(ccolamdl PRIVATE DLONG)
 TARGET_INCLUDE_DIRECTORIES(ccolamdl PRIVATE Include ../SuiteSparse_config)
 
-add_subdirectory(Demo)
+if (BUILD_TESTING)
+    add_subdirectory(Demo)
+endif()

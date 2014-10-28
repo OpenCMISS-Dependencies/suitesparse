@@ -4,10 +4,10 @@ PROJECT (SuiteSparse VERSION 4.4.0 LANGUAGES C Fortran)
 if (OPENCMISS_DEPENDENCIES_LIBRARIES)
     SET(CMAKE_PREFIX_PATH ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR} ${CMAKE_PREFIX_PATH})
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OPENCMISS_DEPENDENCIES_LIBRARIES})
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OPENCMISS_DEPENDENCIES_LIBRARIES})
 else()
-    SET(CMAKE_PREFIX_PATH ../cmake ${CMAKE_PREFIX_PATH})
+    SET(CMAKE_PREFIX_PATH ../cmake/release ../cmake/debug ${CMAKE_PREFIX_PATH})
     SET(OPENCMISS_DEPENDENCIES_CONFIGS_DIR ${SuiteSparse_BINARY_DIR})
+    SET(BUILD_TESTING ON)
 endif()
 
 find_package(BLAS CONFIG REQUIRED)
@@ -19,24 +19,26 @@ find_package(MPI REQUIRED)
 #SET(CMAKE_C_FLAGS "-O3")
 #SET(CMAKE_Fortran_COMPILER ${MPI_Fortran_COMPILER})
 #SET(CMAKE_Fortran_FLAGS "-O3 -Q")
-
 include(CMakePackageConfigHelpers)
-enable_testing()
-MACRO(CREATE_TEST NAME TYPE)
-    add_executable(${NAME} ${NAME}.${TYPE} ${extra})
-    target_include_directories(${NAME} PRIVATE ../Include)
-    target_link_libraries(${NAME} PRIVATE ${LIBS} suitesparseconfig)
-    if (UNIX)
-        target_link_libraries(${NAME} PRIVATE m)
-    endif()
-    
-    set(TARGET ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.out)
-    add_test(NAME ${NAME}
-        COMMAND ${CMAKE_COMMAND}
-            -DCMD=$<TARGET_FILE:${NAME}>
-            -DTARGET=${TARGET}
-            -P ${SuiteSparse_SOURCE_DIR}/testhelper.cmake)
-ENDMACRO()
+
+if (BUILD_TESTING)    
+    enable_testing()
+    MACRO(CREATE_TEST NAME TYPE)
+        add_executable(${NAME} ${NAME}.${TYPE} ${extra})
+        target_include_directories(${NAME} PRIVATE ../Include)
+        target_link_libraries(${NAME} PRIVATE ${LIBS} suitesparseconfig)
+        if (UNIX)
+            target_link_libraries(${NAME} PRIVATE m)
+        endif()
+        
+        set(TARGET ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.out)
+        add_test(NAME ${NAME}
+            COMMAND ${CMAKE_COMMAND}
+                -DCMD=$<TARGET_FILE:${NAME}>
+                -DTARGET=${TARGET}
+                -P ${SuiteSparse_SOURCE_DIR}/testhelper.cmake)
+    ENDMACRO()
+endif()
 
 add_subdirectory(SuiteSparse_config)
 add_subdirectory(AMD)

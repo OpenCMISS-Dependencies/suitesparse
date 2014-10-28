@@ -17,5 +17,7 @@ TARGET_INCLUDE_DIRECTORIES(umfpack PUBLIC
 export(TARGETS umfpack FILE ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/umfpack-${UMFPACK_VERSION}/umfpack-config.cmake)
 WRITE_BASIC_PACKAGE_VERSION_FILE(${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/umfpack-${UMFPACK_VERSION}/umfpack-config-version.cmake
     VERSION ${UMFPACK_VERSION} COMPATIBILITY AnyNewerVersion)
-    
-add_subdirectory(Demo)
+
+if (BUILD_TESTING)
+    add_subdirectory(Demo)
+endif()

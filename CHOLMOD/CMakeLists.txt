@@ -26,4 +26,6 @@ export(TARGETS cholmod amdl amdi camdi camdl colamdi colamdl ccolamdi ccolamdl
 WRITE_BASIC_PACKAGE_VERSION_FILE(${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/cholmod-${CHOLMOD_VERSION}/cholmod-config-version.cmake
     VERSION ${CHOLMOD_VERSION} COMPATIBILITY AnyNewerVersion)
     
-add_subdirectory(Demo)
+if (BUILD_TESTING)
+    add_subdirectory(Demo)
+endif()    
