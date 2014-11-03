@@ -1,5 +1,5 @@
-set(extra "")
-set(LIBS amdl amdi)
+set(extra )
+set(LIBS amd)
 CREATE_TEST(amd_demo c)
 CREATE_TEST(amd_simple c)
 CREATE_TEST(amd_demo2 c)

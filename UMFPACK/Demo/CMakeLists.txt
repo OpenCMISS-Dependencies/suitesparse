@@ -7,14 +7,7 @@ MACRO(ADDTEST NAME BINARY INFILE)
 ENDMACRO()
 
 add_executable(umfpack_di_demo umfpack_di_demo.c)
-target_link_libraries(umfpack_di_demo
-   # cholmod
-    umfpack
-   # amdi
-   # colamdi
-   # ccolamdi
-    suitesparseconfig
-)
+target_link_libraries(umfpack_di_demo umfpack)
 set(TARGET ${CMAKE_CURRENT_SOURCE_DIR}/umfpack_di_demo.out)
 add_test(umfpack_di_demo ${CMAKE_COMMAND}
         -DCMD=${CMAKE_CURRENT_BINARY_DIR}/umfpack_di_demo
@@ -37,12 +30,5 @@ add_test(umfpack_di_demo ${CMAKE_COMMAND}
 #        -P ${SuiteSparse_SOURCE_DIR}/testhelper.cmake)
 
 add_executable(umfpack_simple umfpack_simple.c)
-target_link_libraries(umfpack_simple
-   # cholmod
-    umfpack
-   # amdi
-   # colamdi
-   # ccolamdi
-    suitesparseconfig
-)
+target_link_libraries(umfpack_simple umfpack)
 add_test(umfpack_simple umfpack_simple)

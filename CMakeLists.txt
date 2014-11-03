@@ -1,14 +1,9 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 PROJECT (SuiteSparse VERSION 4.4.0 LANGUAGES C Fortran)
 
-if (OPENCMISS_DEPENDENCIES_LIBRARIES)
-    SET(CMAKE_PREFIX_PATH ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR} ${CMAKE_PREFIX_PATH})
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OPENCMISS_DEPENDENCIES_LIBRARIES})
-else()
-    SET(CMAKE_PREFIX_PATH ../cmake/release ../cmake/debug ${CMAKE_PREFIX_PATH})
-    SET(OPENCMISS_DEPENDENCIES_CONFIGS_DIR ${SuiteSparse_BINARY_DIR})
-    SET(BUILD_TESTING ON)
-endif()
+option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
+option(WITH_CHOLMOD "Build CHOLMOD component" ON)
+option(WITH_UMFPACK "Build UMFPACK component" ON)
 
 find_package(BLAS CONFIG REQUIRED)
 find_package(LAPACK CONFIG REQUIRED)
@@ -21,16 +16,17 @@ find_package(MPI REQUIRED)
 #SET(CMAKE_Fortran_FLAGS "-O3 -Q")
 include(CMakePackageConfigHelpers)
 
-if (BUILD_TESTING)    
+if (BUILD_TESTS)    
     enable_testing()
     MACRO(CREATE_TEST NAME TYPE)
         add_executable(${NAME} ${NAME}.${TYPE} ${extra})
-        target_include_directories(${NAME} PRIVATE ../Include)
+        target_include_directories(${NAME} PRIVATE 
+            ../Include
+            ${SuiteSparse_SOURCE_DIR}/SuiteSparse_config)
         target_link_libraries(${NAME} PRIVATE ${LIBS} suitesparseconfig)
         if (UNIX)
             target_link_libraries(${NAME} PRIVATE m)
         endif()
-        
         set(TARGET ${CMAKE_CURRENT_SOURCE_DIR}/${NAME}.out)
         add_test(NAME ${NAME}
             COMMAND ${CMAKE_COMMAND}
@@ -40,10 +36,17 @@ if (BUILD_TESTING)
     ENDMACRO()
 endif()
 
+#add_definitions(-DAdd_)
 add_subdirectory(SuiteSparse_config)
 add_subdirectory(AMD)
 add_subdirectory(CAMD)
 add_subdirectory(COLAMD)
 add_subdirectory(CCOLAMD)
-add_subdirectory(CHOLMOD)
-add_subdirectory(UMFPACK)
+if (WITH_CHOLMOD OR WITH_UMFPACK)
+    add_subdirectory(CHOLMOD)
+endif()
+if (WITH_UMFPACK)
+    add_subdirectory(UMFPACK)
+endif()
+
+install(EXPORT suitesparse-config DESTINATION lib/cmake)

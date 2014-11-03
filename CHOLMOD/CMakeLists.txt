@@ -13,19 +13,18 @@ set_target_properties(cholmod PROPERTIES OUTPUT_NAME cholmod-${CHOLMOD_VERSION})
 TARGET_INCLUDE_DIRECTORIES(cholmod PRIVATE 
     ../SuiteSparse_config
     ../AMD/Include ../COLAMD/Include ../CAMD/Include ../CCOLAMD/Include
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Include>
 )
-TARGET_INCLUDE_DIRECTORIES(cholmod PUBLIC
-    Include
-)
-target_link_libraries(cholmod 
-    PUBLIC amdl amdi camdi camdl colamdi colamdl ccolamdi ccolamdl 
-    PRIVATE blas lapack metis
-)
-export(TARGETS cholmod amdl amdi camdi camdl colamdi colamdl ccolamdi ccolamdl
-    FILE ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/cholmod-${CHOLMOD_VERSION}/cholmod-config.cmake)
-WRITE_BASIC_PACKAGE_VERSION_FILE(${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/cholmod-${CHOLMOD_VERSION}/cholmod-config-version.cmake
-    VERSION ${CHOLMOD_VERSION} COMPATIBILITY AnyNewerVersion)
+target_link_libraries(cholmod
+    PUBLIC suitesparseconfig amd camd colamd ccolamd
+    PRIVATE blas lapack metis)
+
+install(TARGETS cholmod EXPORT cholmod-config
+    DESTINATION lib INCLUDES DESTINATION include)
+install(EXPORT cholmod-config DESTINATION lib/cmake)
+WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/cholmod-config-version.cmake COMPATIBILITY AnyNewerVersion)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cholmod-config-version.cmake DESTINATION lib/cmake)
     
-if (BUILD_TESTING)
+if (BUILD_TESTS)
     add_subdirectory(Demo)
 endif()    

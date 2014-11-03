@@ -1,33 +1,29 @@
-#PROJECT(AMD C Fortran)
-#CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
-
-file(GLOB src Source/*.c Source/*.f)
-#file(GLOB srcl Source/*.c Source/*.f)
-#set_source_files_properties(${srcl} PROPERTIES COMPILE_DEFINITIONS DLONG)
-#set_source_files_properties(${src} PROPERTIES COMPILE_DEFINITIONS DINT)
+file(GLOB src Source/*.c)
 
 # Version with -DINT
-ADD_LIBRARY(amdi STATIC ${src})
+ADD_LIBRARY(amdi OBJECT ${src})
 target_compile_definitions(amdi PRIVATE DINT)
 TARGET_INCLUDE_DIRECTORIES(amdi 
     PRIVATE ../SuiteSparse_config
-    PUBLIC Include)
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Include>)
+
 # Version with -DLONG
-ADD_LIBRARY(amdl STATIC ${src})
+ADD_LIBRARY(amdl OBJECT ${src})
 target_compile_definitions(amdl PRIVATE DLONG)
 TARGET_INCLUDE_DIRECTORIES(amdl 
     PRIVATE ../SuiteSparse_config
-    PUBLIC Include)
-#file(WRITE dummy.c "")
-#ADD_LIBRARY(amd STATIC dummy.c)
-#target_link_libraries(amd PUBLIC amdi amdl)
-#TARGET_INCLUDE_DIRECTORIES(amd 
-#    PRIVATE ../SuiteSparse_config
-#    PUBLIC Include)
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Include>)
 
-#export(TARGETS amd FILE ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/amd-config.cmake)
+file(GLOB srcF Source/*.f)
+add_library(amd ${srcF} $<TARGET_OBJECTS:amdi> $<TARGET_OBJECTS:amdl>)
+TARGET_INCLUDE_DIRECTORIES(amd
+    PRIVATE ../SuiteSparse_config
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Include>)
+install(TARGETS amd EXPORT suitesparse-config
+    DESTINATION lib INCLUDES DESTINATION include)
+install(FILES Include/amd.h DESTINATION include)
 
 # add tests/demos
-if (BUILD_TESTING)
+if (BUILD_TESTS)
     add_subdirectory(Demo)
 endif()
