@@ -8,8 +8,10 @@ file(GLOB matops MatrixOps/cholmod*.c)
 file(GLOB mod Modify/cholmod*.c)
 file(GLOB part Partition/*.c)
 file(GLOB snod Supernodal/cholmod*.c)
+
 ADD_LIBRARY(cholmod STATIC ${check} ${chol} ${core} ${matops} ${mod} ${part} ${snod})
 set_target_properties(cholmod PROPERTIES OUTPUT_NAME cholmod-${CHOLMOD_VERSION})
+target_compile_definitions(cholmod PRIVATE D${INT_TYPE_FLAG})
 TARGET_INCLUDE_DIRECTORIES(cholmod PRIVATE 
     ../SuiteSparse_config
     ../AMD/Include ../COLAMD/Include ../CAMD/Include ../CCOLAMD/Include
