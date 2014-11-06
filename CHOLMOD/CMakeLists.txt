@@ -21,11 +21,10 @@ target_link_libraries(cholmod
     PUBLIC suitesparseconfig amd camd colamd ccolamd
     PRIVATE blas lapack metis)
 
-install(TARGETS cholmod EXPORT cholmod-config
+install(TARGETS cholmod EXPORT suitesparse-config
     DESTINATION lib INCLUDES DESTINATION include)
-install(EXPORT cholmod-config DESTINATION lib/cmake)
-WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/cholmod-config-version.cmake COMPATIBILITY AnyNewerVersion)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cholmod-config-version.cmake DESTINATION lib/cmake)
+install(DIRECTORY Include/ DESTINATION include
+    FILES_MATCHING PATTERN "*.h")
     
 if (BUILD_TESTS)
     add_subdirectory(Demo)

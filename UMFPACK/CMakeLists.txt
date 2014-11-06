@@ -154,13 +154,11 @@ target_link_libraries(umfpack PUBLIC cholmod)
 ADDSTUFF(umfpack)
 set_target_properties(umfpack PROPERTIES OUTPUT_NAME umfpack-${UMFPACK_VERSION})
 
-install(TARGETS umfpack EXPORT umfpack-config
+install(TARGETS umfpack EXPORT suitesparse-config
     DESTINATION lib
     INCLUDES DESTINATION include)
-install(EXPORT umfpack-config DESTINATION lib/cmake)
-WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/umfpack-config-version.cmake
-    COMPATIBILITY AnyNewerVersion)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/umfpack-config-version.cmake DESTINATION lib/cmake)    
+install(DIRECTORY Include/ DESTINATION include
+    FILES_MATCHING PATTERN "*.h")    
 
 if (BUILD_TESTS)
     add_subdirectory(Demo)
