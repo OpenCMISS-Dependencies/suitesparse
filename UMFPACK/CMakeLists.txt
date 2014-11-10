@@ -1,6 +1,10 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 PROJECT(UMFPACK VERSION 5.7.0 LANGUAGES C)
 
+# Always build double precision version as the complex routines need
+# the real double ones as well
+SET(BUILD_PRECISION ${BUILD_PRECISION}d)
+
 SET(COMMON_SRC 
 Source/umf_ltsolve.c
 Source/umf_utsolve.c
@@ -96,57 +100,60 @@ macro(ADDSTUFF name)
 endmacro()
 
 SET(OBJS )
-foreach(prec d z)
-    if(BUILD_PRECISION MATCHES [${prec}])
-        message(STATUS "Building UMFPACK precision '${prec}'")
-        STRING(TOUPPER ${prec} PREC)
-        SET(CDEFS ${PREC}${INT_TYPE_FLAG})
-        add_library(${prec}map_nox OBJECT Source/umf_triplet.c)
-        ADDSTUFF(${prec}map_nox)
-        target_compile_definitions(${prec}map_nox PRIVATE DO_MAP ${CDEFS})
-        
-        add_library(${prec}nomap_x OBJECT Source/umf_triplet.c)
-        target_compile_definitions(${prec}nomap_x PRIVATE DO_VALUES ${CDEFS})
-        ADDSTUFF(${prec}nomap_x)
-        
-        add_library(${prec}map_x OBJECT Source/umf_triplet.c)
-        target_compile_definitions(${prec}map_x PRIVATE DO_MAP DO_VALUES ${CDEFS})
-        ADDSTUFF(${prec}map_x)
-        
-        add_library(${prec}wsolve OBJECT Source/umfpack_solve.c)
-        target_compile_definitions(${prec}wsolve PRIVATE WSOLVE ${CDEFS})
-        ADDSTUFF(${prec}wsolve)
-        
-        add_library(${prec}cgsolve OBJECT Source/umf_ltsolve.c Source/umf_utsolve.c)
-        target_compile_definitions(${prec}cgsolve PRIVATE CONJUGATE_SOLVE ${CDEFS})
-        ADDSTUFF(${prec}cgsolve)
-        
-        add_library(${prec}fixq OBJECT Source/umf_assemble.c)
-        target_compile_definitions(${prec}fixq PRIVATE FIXQ ${CDEFS})
-        ADDSTUFF(${prec}fixq)
-        
-        add_library(${prec}drop OBJECT Source/umf_store_lu.c)
-        target_compile_definitions(${prec}drop PRIVATE DROP ${CDEFS})
-        ADDSTUFF(${prec}drop)
-        
-        SET(EXTRA_SRC )
-        if(${prec} STREQUAL d)
-            SET(EXTRA_SRC ${DOUBLE_PREC_EXTRA_SRC})
+foreach(INT_TYPE_FLAG INT LONG)
+    foreach(prec d z)
+        if(BUILD_PRECISION MATCHES [${prec}])
+            message(STATUS "Building UMFPACK precision '${prec}' / ${INT_TYPE_FLAG} integers")
+            STRING(TOUPPER ${prec} PREC)
+            SET(CDEFS ${PREC}${INT_TYPE_FLAG})
+            SET(libextra ${prec}${INT_TYPE_FLAG})
+            add_library(${libextra}map_nox OBJECT Source/umf_triplet.c)
+            ADDSTUFF(${libextra}map_nox)
+            target_compile_definitions(${libextra}map_nox PRIVATE DO_MAP ${CDEFS})
+            
+            add_library(${libextra}nomap_x OBJECT Source/umf_triplet.c)
+            target_compile_definitions(${libextra}nomap_x PRIVATE DO_VALUES ${CDEFS})
+            ADDSTUFF(${libextra}nomap_x)
+            
+            add_library(${libextra}map_x OBJECT Source/umf_triplet.c)
+            target_compile_definitions(${libextra}map_x PRIVATE DO_MAP DO_VALUES ${CDEFS})
+            ADDSTUFF(${libextra}map_x)
+            
+            add_library(${libextra}wsolve OBJECT Source/umfpack_solve.c)
+            target_compile_definitions(${libextra}wsolve PRIVATE WSOLVE ${CDEFS})
+            ADDSTUFF(${libextra}wsolve)
+            
+            add_library(${libextra}cgsolve OBJECT Source/umf_ltsolve.c Source/umf_utsolve.c)
+            target_compile_definitions(${libextra}cgsolve PRIVATE CONJUGATE_SOLVE ${CDEFS})
+            ADDSTUFF(${libextra}cgsolve)
+            
+            add_library(${libextra}fixq OBJECT Source/umf_assemble.c)
+            target_compile_definitions(${libextra}fixq PRIVATE FIXQ ${CDEFS})
+            ADDSTUFF(${libextra}fixq)
+            
+            add_library(${libextra}drop OBJECT Source/umf_store_lu.c)
+            target_compile_definitions(${libextra}drop PRIVATE DROP ${CDEFS})
+            ADDSTUFF(${libextra}drop)
+            
+            SET(EXTRA_SRC )
+            if(${prec} STREQUAL d)
+                SET(EXTRA_SRC ${DOUBLE_PREC_EXTRA_SRC})
+            endif()
+            add_library(${libextra}umfpack OBJECT ${COMMON_SRC} ${EXTRA_SRC})
+            target_compile_definitions(${libextra}umfpack PRIVATE ${CDEFS})
+            ADDSTUFF(${libextra}umfpack)
+            
+            LIST(APPEND OBJS "$<TARGET_OBJECTS:${libextra}umfpack>"
+                "$<TARGET_OBJECTS:${libextra}map_nox>"
+                "$<TARGET_OBJECTS:${libextra}nomap_x>"
+                "$<TARGET_OBJECTS:${libextra}map_x>"
+                "$<TARGET_OBJECTS:${libextra}wsolve>"
+                "$<TARGET_OBJECTS:${libextra}cgsolve>"
+                "$<TARGET_OBJECTS:${libextra}fixq>"
+                "$<TARGET_OBJECTS:${libextra}drop>"
+            )        
         endif()
-        add_library(${prec}umfpack OBJECT ${COMMON_SRC} ${EXTRA_SRC})
-        target_compile_definitions(${prec}umfpack PRIVATE ${CDEFS})
-        ADDSTUFF(${prec}umfpack)
-        
-        LIST(APPEND OBJS "$<TARGET_OBJECTS:${prec}umfpack>"
-            "$<TARGET_OBJECTS:${prec}map_nox>"
-            "$<TARGET_OBJECTS:${prec}nomap_x>"
-            "$<TARGET_OBJECTS:${prec}map_x>"
-            "$<TARGET_OBJECTS:${prec}wsolve>"
-            "$<TARGET_OBJECTS:${prec}cgsolve>"
-            "$<TARGET_OBJECTS:${prec}fixq>"
-            "$<TARGET_OBJECTS:${prec}drop>"
-        )        
-    endif()
+    endforeach()
 endforeach()
 	
 ADD_LIBRARY(umfpack STATIC ${OBJS} Source/umfpack_timer.c Source/umfpack_tictoc.c)
