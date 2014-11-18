@@ -5,9 +5,9 @@ option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
 set(BUILD_PRECISION dz CACHE STRING "${PROJECT_NAME} - Build precisions (dz)")
 
 find_package(MPI REQUIRED)
-find_package(BLAS CONFIG REQUIRED)
-find_package(LAPACK CONFIG REQUIRED)
-find_package(METIS CONFIG REQUIRED)
+find_package(BLAS ${BLAS_VERSION} CONFIG REQUIRED)
+find_package(LAPACK ${LAPACK_VERSION} CONFIG REQUIRED)
+find_package(METIS ${METIS_VERSION} CONFIG REQUIRED)
 
 if (BUILD_TESTS)    
     enable_testing()
