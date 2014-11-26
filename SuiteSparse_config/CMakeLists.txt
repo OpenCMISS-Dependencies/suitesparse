@@ -1,4 +1,4 @@
-ADD_LIBRARY(suitesparseconfig STATIC SuiteSparse_config.c)
+ADD_LIBRARY(suitesparseconfig SuiteSparse_config.c)
 TARGET_INCLUDE_DIRECTORIES(suitesparseconfig
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
