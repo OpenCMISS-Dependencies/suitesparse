@@ -8,5 +8,8 @@ install(TARGETS suitesparseconfig EXPORT suitesparse-config
 install(FILES SuiteSparse_config.h DESTINATION include)
 
 if (UNIX)
-    target_link_libraries(suitesparseconfig rt)
+    target_link_libraries(suitesparseconfig PUBLIC m)
+    if (NOT APPLE)
+        target_link_libraries(suitesparseconfig PUBLIC rt)
+    endif()
 endif()
