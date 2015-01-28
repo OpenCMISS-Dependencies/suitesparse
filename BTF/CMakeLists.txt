@@ -14,10 +14,7 @@ TARGET_INCLUDE_DIRECTORIES(btfl
     PRIVATE ../SuiteSparse_config
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Include>)
 
-add_library(btf ${src} $<TARGET_OBJECTS:btfi> $<TARGET_OBJECTS:btfl>)
-TARGET_INCLUDE_DIRECTORIES(btf
-    PRIVATE ../SuiteSparse_config
-    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Include>)
+add_library(btf $<TARGET_OBJECTS:btfi> $<TARGET_OBJECTS:btfl>)
 install(TARGETS btf EXPORT suitesparse-config
     DESTINATION lib INCLUDES DESTINATION include)
 install(FILES Include/btf.h DESTINATION include)

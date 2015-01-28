@@ -4,6 +4,7 @@ PROJECT (SuiteSparse VERSION 4.4.0 LANGUAGES C Fortran)
 option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
 set(BUILD_PRECISION dz CACHE STRING "${PROJECT_NAME} - Build precisions (dz)")
 option(WITH_OPENMP "${PROJECT_NAME} - Use OpenMP" ON)
+SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 find_package(MPI REQUIRED)
 find_package(BLAS ${BLAS_VERSION} REQUIRED)
