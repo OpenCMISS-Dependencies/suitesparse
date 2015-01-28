@@ -157,7 +157,7 @@ foreach(INT_TYPE_FLAG INT LONG)
 endforeach()
 	
 ADD_LIBRARY(umfpack ${OBJS} Source/umfpack_timer.c Source/umfpack_tictoc.c)
-target_link_libraries(umfpack PUBLIC cholmod)
+target_link_libraries(umfpack PUBLIC blas cholmod)
 ADDSTUFF(umfpack)
 set_target_properties(umfpack PROPERTIES OUTPUT_NAME umfpack-${UMFPACK_VERSION})
 

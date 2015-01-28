@@ -8,6 +8,7 @@ target_compile_definitions(camdl PRIVATE DLONG)
 TARGET_INCLUDE_DIRECTORIES(camdl PRIVATE Include ../SuiteSparse_config)
 
 add_library(camd $<TARGET_OBJECTS:camdi> $<TARGET_OBJECTS:camdl>)
+target_link_libraries(camd suitesparseconfig)
 TARGET_INCLUDE_DIRECTORIES(camd PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Include> 
     PRIVATE ../SuiteSparse_config)

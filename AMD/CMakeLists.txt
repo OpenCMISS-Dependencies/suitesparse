@@ -16,6 +16,7 @@ TARGET_INCLUDE_DIRECTORIES(amdl
 
 file(GLOB srcF Source/*.f)
 add_library(amd ${srcF} $<TARGET_OBJECTS:amdi> $<TARGET_OBJECTS:amdl>)
+target_link_libraries(amd suitesparseconfig)
 TARGET_INCLUDE_DIRECTORIES(amd
     PRIVATE ../SuiteSparse_config
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Include>)

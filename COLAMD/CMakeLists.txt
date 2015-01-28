@@ -7,6 +7,7 @@ target_compile_definitions(colamdl PRIVATE DLONG)
 TARGET_INCLUDE_DIRECTORIES(colamdl PRIVATE Include ../SuiteSparse_config)
 
 add_library(colamd $<TARGET_OBJECTS:colamdi> $<TARGET_OBJECTS:colamdl>)
+target_link_libraries(colamd suitesparseconfig)
 TARGET_INCLUDE_DIRECTORIES(colamd
     PRIVATE ../SuiteSparse_config
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Include>)
