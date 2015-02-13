@@ -64,4 +64,4 @@ install(EXPORT suitesparse-config DESTINATION ${PACKAGE_CONFIG_DIR})
 include(CMakePackageConfigHelpers)
 WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-version.cmake COMPATIBILITY SameMajorVersion)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-version.cmake
-    DESTINATION lib/cmake)
+    DESTINATION ${PACKAGE_CONFIG_DIR})
