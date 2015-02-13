@@ -2,6 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 PROJECT (SuiteSparse VERSION 4.4.0 LANGUAGES C Fortran)
 
 option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
+option(PACKAGE_CONFIG_DIR "Directory for package config files (relative to CMAKE_INSTALL_PREFIX)" "lib/cmake")
 set(BUILD_PRECISION dz CACHE STRING "${PROJECT_NAME} - Build precisions (dz)")
 option(WITH_OPENMP "${PROJECT_NAME} - Use OpenMP" ON)
 if (BUILD_SHARED_LIBS)
@@ -59,7 +60,7 @@ add_subdirectory(KLU)
 add_subdirectory(CHOLMOD)
 add_subdirectory(UMFPACK)
 
-install(EXPORT suitesparse-config DESTINATION lib/cmake)
+install(EXPORT suitesparse-config DESTINATION ${PACKAGE_CONFIG_DIR})
 include(CMakePackageConfigHelpers)
 WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-version.cmake COMPATIBILITY SameMajorVersion)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-version.cmake
