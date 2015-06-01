@@ -1,6 +1,9 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 PROJECT (SuiteSparse VERSION 4.4.0 LANGUAGES C Fortran)
 
+# Compilation hints:
+# The SUITESPARSE timer function is disabled on __MINGW32__ platforms; see SuiteSparse_config.h:158
+
 option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
 option(PACKAGE_CONFIG_DIR "Directory for package config files (relative to CMAKE_INSTALL_PREFIX)" "lib/cmake")
 set(BUILD_PRECISION dz CACHE STRING "${PROJECT_NAME} - Build precisions (dz)")
