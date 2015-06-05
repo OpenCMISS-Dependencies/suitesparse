@@ -63,8 +63,27 @@ add_subdirectory(KLU)
 add_subdirectory(CHOLMOD)
 add_subdirectory(UMFPACK)
 
+# Create interface target for easy linking against suitesparse
+add_library(suitesparse INTERFACE)
+target_link_libraries(suitesparse INTERFACE
+    suitesparseconfig amd btf camd cholmod colamd ccolamd klu umfpack
+)
+install(TARGETS suitesparse EXPORT suitesparse-config) 
 install(EXPORT suitesparse-config DESTINATION ${PACKAGE_CONFIG_DIR})
 include(CMakePackageConfigHelpers)
 WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-version.cmake COMPATIBILITY SameMajorVersion)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-version.cmake
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-dependencies.cmake 
+    "include(CMakeFindDependencyMacro)\r\n"
+    "set(_OLD_IMPORT_PREFIX \${_IMPORT_PREFIX})\r\n"
+    "find_dependency(BLAS ${BLAS_VERSION})\r\n"
+    "find_dependency(LAPACK ${LAPACK_VERSION})\r\n"
+    "find_dependency(METIS ${METIS_VERSION})\r\n"
+)
+if (WITH_OPENMP)
+    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-dependencies.cmake "find_dependency(OpenMP)\r\n")
+endif()
+file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-dependencies.cmake "set(_IMPORT_PREFIX \${_OLD_IMPORT_PREFIX})")
+install(FILES 
+    ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-version.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-dependencies.cmake
     DESTINATION ${PACKAGE_CONFIG_DIR})
