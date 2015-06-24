@@ -74,7 +74,7 @@ include(CMakePackageConfigHelpers)
 WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-version.cmake COMPATIBILITY SameMajorVersion)
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-dependencies.cmake 
     "include(CMakeFindDependencyMacro)\r\n"
-    "set(_OLD_IMPORT_PREFIX \${_IMPORT_PREFIX})\r\n"
+    	"set(${PROJECT_NAME}_IMPORT_PREFIX \${_IMPORT_PREFIX})\r\n"
     "find_dependency(BLAS ${BLAS_VERSION})\r\n"
     "find_dependency(LAPACK ${LAPACK_VERSION})\r\n"
     "find_dependency(METIS ${METIS_VERSION})\r\n"
@@ -82,7 +82,7 @@ file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-dependencies.cmake
 if (WITH_OPENMP)
     file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-dependencies.cmake "find_dependency(OpenMP)\r\n")
 endif()
-file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-dependencies.cmake "set(_IMPORT_PREFIX \${_OLD_IMPORT_PREFIX})")
+file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-dependencies.cmake "set(_IMPORT_PREFIX \${${PROJECT_NAME}_IMPORT_PREFIX})")
 install(FILES 
     ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-version.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-dependencies.cmake
