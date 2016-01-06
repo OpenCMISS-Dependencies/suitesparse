@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.3)
 PROJECT(UMFPACK VERSION 5.7.0 LANGUAGES C)
 
 # Always build double precision version as the complex routines need
