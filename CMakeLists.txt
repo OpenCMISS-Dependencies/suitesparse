@@ -13,7 +13,7 @@ if (BUILD_SHARED_LIBS)
     SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 endif()
 
-find_package(MPI REQUIRED)
+find_package(MPI ${MPI_VERSION} REQUIRED)
 find_package(BLAS ${BLAS_VERSION} REQUIRED)
 find_package(LAPACK ${LAPACK_VERSION} REQUIRED)
 find_package(METIS ${METIS_VERSION} REQUIRED)
@@ -51,6 +51,10 @@ if (BUILD_TESTS)
                 -DTARGET=${TARGET}
                 -P ${SuiteSparse_SOURCE_DIR}/testhelper.cmake)
     ENDMACRO()
+endif()
+
+if (DEFINED FORTRAN_MANGLING)
+    add_definitions(-D${FORTRAN_MANGLING})
 endif()
 
 add_subdirectory(SuiteSparse_config)

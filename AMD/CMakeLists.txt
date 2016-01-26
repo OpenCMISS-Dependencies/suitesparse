@@ -25,6 +25,6 @@ install(TARGETS amd EXPORT suitesparse-config
 install(FILES Include/amd.h DESTINATION include)
 
 # add tests/demos
-if (BUILD_TESTS)
+if (BUILD_TESTS AND NOT MSVC)
     add_subdirectory(Demo)
 endif()

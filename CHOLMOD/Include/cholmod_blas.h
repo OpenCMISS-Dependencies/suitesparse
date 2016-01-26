@@ -46,15 +46,17 @@
 #define CHOLMOD_ARCHITECTURE "Compaq Alpha"
 
 #elif defined (_WIN32) || defined (WIN32) || defined (_WIN64) || defined (WIN64)
-#if defined (__MINGW32__) || defined (__MINGW32__)
-#define CHOLMOD_MINGW
-#elif defined (__CYGWIN32__) || defined (__CYGWIN32__)
-#define CHOLMOD_CYGWIN
-#else
-#define CHOLMOD_WINDOWS
-#define BLAS_NO_UNDERSCORE
-#endif
-#define CHOLMOD_ARCHITECTURE "Microsoft Windows"
+	#if defined (__MINGW32__) || defined (__MINGW32__)
+		#define CHOLMOD_MINGW
+	#elif defined (__CYGWIN32__) || defined (__CYGWIN32__)
+		#define CHOLMOD_CYGWIN
+	#else
+		#define CHOLMOD_WINDOWS
+		#ifndef UpCase
+			#define BLAS_NO_UNDERSCORE
+		#endif
+	#endif
+	#define CHOLMOD_ARCHITECTURE "Microsoft Windows"
 
 #elif defined (__hppa) || defined (__hpux) || defined (MHPUX) || defined (ARCH_HPUX)
 #define CHOLMOD_HP
@@ -122,6 +124,26 @@
 #define BLAS_ZGER  zgeru
 #define BLAS_ZSCAL zscal
 #define LAPACK_ZPOTRF zpotrf
+
+#elif defined (UpCase)
+
+#define BLAS_DTRSV DTRSV
+#define BLAS_DGEMV DGEMV
+#define BLAS_DTRSM DTRSM
+#define BLAS_DGEMM DGEMM
+#define BLAS_DSYRK DSYRK
+#define BLAS_DGER  DGER
+#define BLAS_DSCAL DSCAL
+#define LAPACK_DPOTRF DPOTRF
+
+#define BLAS_ZTRSV ZTRSV
+#define BLAS_ZGEMV ZGEMV
+#define BLAS_ZTRSM ZTRSM
+#define BLAS_ZGEMM ZGEMM
+#define BLAS_ZHERK ZHERK
+#define BLAS_ZGER  ZGERU
+#define BLAS_ZSCAL ZSCAL
+#define LAPACK_ZPOTRF ZPOTRF
 
 #else
 
