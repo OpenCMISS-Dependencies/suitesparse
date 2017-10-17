@@ -14,7 +14,6 @@ if (BUILD_SHARED_LIBS)
 endif()
 
 find_package(MPI ${MPI_VERSION} REQUIRED)
-find_package(BLAS ${BLAS_VERSION} REQUIRED)
 find_package(LAPACK ${LAPACK_VERSION} REQUIRED)
 find_package(METIS ${METIS_VERSION} REQUIRED)
 
@@ -79,7 +78,6 @@ WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-dependencies.cmake 
     "include(CMakeFindDependencyMacro)\r\n"
     	"set(${PROJECT_NAME}_IMPORT_PREFIX \${_IMPORT_PREFIX})\r\n"
-    "find_dependency(BLAS ${BLAS_VERSION})\r\n"
     "find_dependency(LAPACK ${LAPACK_VERSION})\r\n"
     "find_dependency(METIS ${METIS_VERSION})\r\n"
 )
