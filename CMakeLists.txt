@@ -14,6 +14,8 @@ if (BUILD_SHARED_LIBS)
 endif()
 
 find_package(MPI ${MPI_VERSION} REQUIRED)
+# Find BLAS separately so we can use 'blas' target.
+find_package(BLAS ${BLAS_VERSION} REQUIRED)
 find_package(LAPACK ${LAPACK_VERSION} REQUIRED)
 find_package(METIS ${METIS_VERSION} REQUIRED)
 
