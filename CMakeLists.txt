@@ -80,8 +80,8 @@ WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-dependencies.cmake 
     "include(CMakeFindDependencyMacro)\r\n"
     	"set(${PROJECT_NAME}_IMPORT_PREFIX \${_IMPORT_PREFIX})\r\n"
-    "find_dependency(LAPACK ${LAPACK_VERSION})\r\n"
-    "find_dependency(METIS ${METIS_VERSION})\r\n"
+    "set(LAPACK_FIND_SYSTEM ${LAPACK_FIND_SYSTEM})\r\nfind_dependency(LAPACK ${LAPACK_VERSION})\r\n"
+    "set(METIS_FIND_SYSTEM ${METIS_FIND_SYSTEM})\r\nfind_dependency(METIS ${METIS_VERSION})\r\n"
 )
 if (WITH_OPENMP)
     file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/suitesparse-config-dependencies.cmake "find_dependency(OpenMP)\r\n")
